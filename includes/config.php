@@ -7,10 +7,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Database configuration
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'security_alerts_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', '127.0.0.1');
+define('DB_NAME', 'alert247');
+define('DB_USER', 'alert247');
+define('DB_PASS', '@Tunjitech2024');
 
 // Create database connection
 try {

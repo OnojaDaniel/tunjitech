@@ -1,0 +1,58 @@
+RewriteEngine On
+
+# Security: Block access to sensitive directories
+RewriteRule ^(includes|config|uploads) - [F,L]
+
+# Remove .php extension from URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Admin routes
+RewriteRule ^admin-dashboard$ admin/dashboard.php [L]
+RewriteRule ^admin-alerts$ admin/alerts.php [L]
+RewriteRule ^admin-alerts/new$ admin/alerts.php [L]
+RewriteRule ^admin-alerts/([0-9]+)/view$ admin/view_alert.php?id=$1 [L]
+RewriteRule ^admin-alerts/([0-9]+)/edit$ admin/edit_alert.php?id=$1 [L]
+RewriteRule ^admin-clients$ admin/clients.php [L]
+RewriteRule ^admin-clients/register$ admin/register_client.php [L]
+RewriteRule ^admin-clients/([0-9]+)/view$ admin/view_client.php?id=$1 [L]
+RewriteRule ^admin-clients/([0-9]+)/edit$ admin/edit_client.php?id=$1 [L]
+RewriteRule ^admin-subadmins$ admin/subadmins.php [L]
+RewriteRule ^admin-subadmins/register$ admin/register_subadmin.php [L]
+RewriteRule ^admin-analytics$ admin/analytics.php [L]
+RewriteRule ^admin-messages$ admin/messages.php [L]
+RewriteRule ^admin-test-sms$ admin/test_sms.php [L]
+
+# Client routes
+RewriteRule ^client-dashboard$ client/dashboard.php [L]
+RewriteRule ^client-alerts$ client/alerts.php [L]
+RewriteRule ^client-alerts/([0-9]+)/view$ client/view_alert.php?id=$1 [L]
+RewriteRule ^client-analytics$ client/analytics.php [L]
+RewriteRule ^client-messages$ client/messages.php [L]
+RewriteRule ^client-users$ client/users.php [L]
+
+# Public routes (already handled by .php removal, but explicit for clarity)
+RewriteRule ^login$ login.php [L]
+RewriteRule ^register$ register.php [L]
+RewriteRule ^logout$ logout.php [L]
+
+# Homepage redirect
+RewriteRule ^$ index.php [L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent access to .htaccess itself
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+# Prevent access to other sensitive files
+<FilesMatch "\.(env|log|sql|json)$">
+    Require all denied
+</FilesMatch>
